@@ -1,7 +1,7 @@
 import React from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { BsFillHandbagFill } from "react-icons/bs";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 
 function Home({ data, setCount, isLoggedIn, setCartItems }) {
   const navigate = useNavigate();
@@ -44,7 +44,8 @@ function Home({ data, setCount, isLoggedIn, setCartItems }) {
                 onClick={() => handleCart(item)}
                 disabled={item.added}
               >
-                <BsFillHandbagFill className="text-white" />
+                <HiOutlineShoppingBag className="text-white text-2xl " />
+
                 {item.added ? "Added to Bag" : "Add to Bag"}
               </button>
             </div>

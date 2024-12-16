@@ -1,7 +1,7 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
-import { CiShoppingCart } from "react-icons/ci";
+import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -52,7 +52,7 @@ function Navbar({
           {/* Cart Button */}
           <NavLink to="/cart">
             <button className="text-white flex items-center gap-2 px-4 py-2 rounded-full bg-blue-600 hover:bg-[#1058B7] relative">
-              <CiShoppingCart className="text-2xl" />
+              <HiOutlineShoppingBag className="text-2xl" />
               {count > 0 && (
                 <span
                   className="absolute -top-1 -right-2 bg-green-600 text-xs w-5 h-5 flex 
@@ -61,7 +61,7 @@ function Navbar({
                   {count}
                 </span>
               )}
-              Cart
+              Bag
             </button>
           </NavLink>
 

@@ -4,11 +4,36 @@ import PropTypes from "prop-types"; // Import PropTypes
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import toast from "react-hot-toast";
 
-function Cart({ cartItems, setCartItems, setCount, address, addressSaved,isLoggedIn }) {
-   // Replace with actual login state from context or props
+function Cart({
+  cartItems,
+  setCartItems,
+  setCount,
+  address,
+  addressSaved,
+  isLoggedIn,
+}) {
+  // Replace with actual login state from context or props
   const navigate = useNavigate();
-
+  const [total, setTotal] = useState(1);
   // Remove item from cart
+  const handleIncrease = (id) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  const handleDecrease = (id) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
   const handleRemoveFromCart = (id) => {
     setCartItems((prevCart) => prevCart.filter((item) => item.id !== id));
     setCount((prev) => prev - 1);
@@ -31,73 +56,77 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved,isLogge
   const amount = cartItems.reduce((total, item) => total + item.price, 0);
   const handlePayment = async () => {
     try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/order`, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                amount
-            })
-        });
-
-        const data = await res.json();
-        console.log(data);
-        handlePaymentVerify(data.data)
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-// handlePaymentVerify Function
-const handlePaymentVerify = async (data) => {
-    const options = {
-        key: import.meta.env.RAZORPAY_KEY_ID,
-        amount: data.amount,
-        currency: data.currency,
-        name: address.name,
-        description: "Test Mode",
-        order_id: data.id,
-        handler: async (response) => {
-            console.log("response", response)
-            try {
-                const res = await fetch(`${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/verify`, {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_signature: response.razorpay_signature,
-                    })
-                })
-
-                const verifyData = await res.json();
-
-                if (verifyData.message) {
-                    toast.success(verifyData.message)
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        theme: {
-            color: "#5f63b8"
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/order`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            amount,
+          }),
         }
+      );
+
+      const data = await res.json();
+      console.log(data);
+      handlePaymentVerify(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // handlePaymentVerify Function
+  const handlePaymentVerify = async (data) => {
+    const options = {
+      key: import.meta.env.RAZORPAY_KEY_ID,
+      amount: data.amount,
+      currency: data.currency,
+      name: address.name,
+      description: "Test Mode",
+      order_id: data.id,
+      handler: async (response) => {
+        console.log("response", response);
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/verify`,
+            {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+              },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            }
+          );
+
+          const verifyData = await res.json();
+
+          if (verifyData.message) {
+            toast.success(verifyData.message);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      },
+      theme: {
+        color: "#5f63b8",
+      },
     };
     const rzp1 = new window.Razorpay(options);
     rzp1.open();
-}
-
-
+  };
 
   return (
     <div className="flex flex-col lg:flex-row mt-8 w-full p-6 lg:p-14 gap-8 lg:ml-[18%]">
       {/* Cart Items Container */}
       <div className="flex-[0.7]">
         {cartItems.length === 0 ? (
-          <div className="flex flex-col ml-10 items-center justify-center bg-blue-400 gap-6">
+          <div className="flex flex-col ml-10 items-center justify-center  gap-6">
             <h2 className="text-3xl lg:text-5xl text-center font-semibold text-gray-800">
               Your Cart is Empty
             </h2>
@@ -131,6 +160,11 @@ const handlePaymentVerify = async (data) => {
                   <span className="text-lg md:text-xl font-semibold text-green-600">
                     ₹{item.price}
                   </span>
+                  {/* <div>
+                    <button onClick={handleDecrease}>-</button>
+                    {total}
+                    <button onClick={handleIncrease}>+</button>
+                  </div> */}
                   <button
                     onClick={() => handleRemoveFromCart(item.id)}
                     className="flex items-center text-red-500 hover:text-red-600 transition duration-200"

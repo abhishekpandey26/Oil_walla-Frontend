@@ -126,7 +126,7 @@ console.log(address)
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} isLoggedIn={isLoggedIn}/>
+      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
 
       {/* Main Content */}
       <div className="flex flex-col w-full">

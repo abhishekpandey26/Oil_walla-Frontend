@@ -61,7 +61,7 @@ const AddressSaver = ({
       setIsFetching(true);
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/address/save",
+          "http://localhost:5000/api/address/save",
           address
         );
         console.log(response.data);
