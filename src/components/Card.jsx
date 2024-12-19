@@ -8,10 +8,31 @@ function Home({ data, setCount, isLoggedIn, setCartItems }) {
 
   const handleCart = (item) => {
     setCount((prev) => prev + 1);
-    setCartItems((prev) => [...prev, item]);
-
+    setCartItems((prevCartItems) => {
+      const existingItem = prevCartItems.find(
+        (cartItem) => cartItem.id === item.id
+      );
+  
+      if (existingItem) {
+        // If item exists, increment its quantity and update the price
+        return prevCartItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + 1,
+                price: cartItem.price + item.amount, // Update price
+              }
+            : cartItem
+        );
+      } else {
+        // If item doesn't exist, add it with quantity 1
+        return [...prevCartItems, { ...item, quantity: 1, price: item.amount }];
+      }
+    });
+  
     toast.success("Added to Cart!");
   };
+  
 
   return (
     <div className="p-4 md:ml-[18%] mt-20">

@@ -19,16 +19,27 @@ function Cart({
   const handleIncrease = (id) => {
     setCartItems((prev) =>
       prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        item.id === id
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+              price: item.price + item.amount, // `amount` is the single unit price
+            }
+          : item
       )
     );
   };
+  
 
   const handleDecrease = (id) => {
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
+          ? {
+              ...item,
+              quantity: item.quantity - 1,
+              price: item.price - item.amount,
+            }
           : item
       )
     );
@@ -154,17 +165,31 @@ function Cart({
                   <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
                     {item.name}
                   </h1>
-                  <p className="text-gray-600 mb-4">Price: ₹{item.price}</p>
+                  <p className="text-gray-600 mb-4">Price: ₹{item.amount}</p>
                 </div>
                 <div className="flex items-center justify-between mt-4">
                   <span className="text-lg md:text-xl font-semibold text-green-600">
                     ₹{item.price}
                   </span>
-                  {/* <div>
-                    <button onClick={handleDecrease}>-</button>
-                    {total}
-                    <button onClick={handleIncrease}>+</button>
-                  </div> */}
+                  {
+                   <div className="flex items-center space-x-4">
+                   <span className="text-lg font-medium">Quantity</span>
+                   <button
+                     className="text-xl bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1"
+                     onClick={() => handleDecrease(item.id)}
+                   >
+                     -
+                   </button>
+                   <span className="text-lg font-semibold">{item.quantity}</span>
+                   <button
+                     className="text-xl bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1"
+                     onClick={() => handleIncrease(item.id)}
+                   >
+                     +
+                   </button>
+                 </div>
+                 
+                  }
                   <button
                     onClick={() => handleRemoveFromCart(item.id)}
                     className="flex items-center text-red-500 hover:text-red-600 transition duration-200"
@@ -184,7 +209,8 @@ function Cart({
         <h1 className="text-2xl font-bold text-green-600 mb-4">Summary</h1>
         <div className="flex flex-col">
           <h2 className="font-semibold text-gray-600 mb-2">
-            Items in Cart: {cartItems.length}
+            Items in Cart:{" "}
+            {cartItems.reduce((total, item) => total + item.quantity, 0)}
           </h2>
 
           {addressSaved && address && (

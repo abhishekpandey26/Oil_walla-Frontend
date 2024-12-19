@@ -21,6 +21,8 @@ function App() {
       price: 1000,
       added: false,
       id: 1,
+      quantity: 1,
+      amount: 1000
     },
     {
       image:
@@ -29,6 +31,8 @@ function App() {
       price: 1000,
       added: false,
       id: 2,
+      quantity: 1,
+      amount: 1000
     },
     {
       image:
@@ -37,6 +41,8 @@ function App() {
       price: 1000,
       added: false,
       id: 3,
+      quantity: 1,
+      amount: 1000
     },
     {
       image:
@@ -45,6 +51,8 @@ function App() {
       price: 1000,
       added: false,
       id: 4,
+      quantity: 1,
+      amount: 1000
     },
     {
       image:
@@ -53,6 +61,8 @@ function App() {
       price: 1000,
       added: false,
       id: 5,
+      quantity: 1,
+      amount: 1000
     },
     {
       image:
@@ -61,6 +71,8 @@ function App() {
       price: 2000,
       added: false,
       id: 6,
+      quantity: 1,
+      amount: 2000
     },
     {
       image:
@@ -69,6 +81,8 @@ function App() {
       price: 9000,
       added: false,
       id: 7,
+      quantity: 1,
+      amount:9000
     },
     {
       image:
@@ -77,6 +91,8 @@ function App() {
       price: 7000,
       added: false,
       id: 8,
+      quantity: 1,
+      amount: 7000
     },
     {
       image:
@@ -85,6 +101,8 @@ function App() {
       price: 1000,
       added: false,
       id: 9,
+      quantity: 1,
+      amount: 1000
     },
 
     // Add more items as needed
