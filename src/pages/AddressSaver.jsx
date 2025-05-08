@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const AddressSaver = ({
-  setAddressSaved,
-  addressSaved,
-  setAddress,
-  address,
-}) => {
+const AddressSaver = ({ setAddressSaved, addressSaved, setAddress, address }) => {
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
 
@@ -60,8 +55,10 @@ const AddressSaver = ({
     ) {
       setIsFetching(true);
       try {
+        // Use the environment variable for the API URL
+        const apiUrl = import.meta.env.VITE_BACKEND_HOST_URL;  // This is how we access the env variable in Vite
         const response = await axios.post(
-          "http://localhost:5000/api/address/save",
+          `${apiUrl}/api/address/save`, // Use the dynamic URL here
           address
         );
         console.log(response.data);

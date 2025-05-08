@@ -10,11 +10,13 @@ const LoginPage = ({ setIsLoggedIn }) => {
   const [messageType, setMessageType] = useState(""); // Error or success
   const navigate = useNavigate();
 
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_HOST_URL;
+
   // Function to handle OTP sending
   const handleSendOtp = async () => {
     if (email.includes("@")) {
       try {
-        const response = await fetch("http://localhost:5000/api/otp/send-otp", {
+        const response = await fetch(`${BACKEND_URL}/api/otp/send-otp`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -46,7 +48,7 @@ const LoginPage = ({ setIsLoggedIn }) => {
   // Function to handle OTP verification
   const handleVerifyOtp = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/otp/verify-otp", {
+      const response = await fetch(`${BACKEND_URL}/api/otp/verify-otp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,7 +79,6 @@ const LoginPage = ({ setIsLoggedIn }) => {
       const interval = setInterval(() => {
         setTimer((prev) => prev - 1);
       }, 1000);
-
       return () => clearInterval(interval);
     }
   }, [otpSent, timer]);
@@ -90,8 +91,8 @@ const LoginPage = ({ setIsLoggedIn }) => {
         </h2>
         {message && (
           <p
-            className={`mb-4  text-center text-sm px-4 py-3 rounded-md bg-[#D1E7DD] ${
-              messageType === "error" ? "text-red-500" : "text-black"
+            className={`mb-4 text-center text-sm px-4 py-3 rounded-md ${
+              messageType === "error" ? "bg-red-100 text-red-600" : "bg-green-100 text-green-700"
             }`}
           >
             {message}
