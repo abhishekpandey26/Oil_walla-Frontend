@@ -28,7 +28,7 @@ function Navbar({
       {/* Logo Section */}
       <div className="flex items-center">
         <img
-          className="w-12 h-12 rounded-full bg-yellow-200"
+          className="w-12 h-12 rounded-full bg-[#34b82e]"
           src={logo}
           alt="Logo"
         />
