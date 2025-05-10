@@ -4,6 +4,7 @@ import { FiMenu } from "react-icons/fi";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { NavLink, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import logo from "../assets/logo.png"; // Assuming you have a logo image
 
 function Navbar({
   toggleSidebar,
@@ -28,7 +29,7 @@ function Navbar({
       <div className="flex items-center">
         <img
           className="w-12 h-12 rounded-full bg-yellow-200"
-          src="https://via.placeholder.com/150"
+          src={logo}
           alt="Logo"
         />
       </div>
