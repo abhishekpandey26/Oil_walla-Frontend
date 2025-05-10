@@ -7,18 +7,13 @@ import toast from "react-hot-toast";
 function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLoggedIn }) {
   const navigate = useNavigate();
 
-  // Calculate total amount
   const totalAmount = cartItems.reduce((total, item) => total + item.price, 0);
 
   const handleIncrease = (id) => {
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-              price: item.price + item.amount,
-            }
+          ? { ...item, quantity: item.quantity + 1, price: item.price + item.amount }
           : item
       )
     );
@@ -28,11 +23,7 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === id && item.quantity > 1
-          ? {
-              ...item,
-              quantity: item.quantity - 1,
-              price: item.price - item.amount,
-            }
+          ? { ...item, quantity: item.quantity - 1, price: item.price - item.amount }
           : item
       )
     );
@@ -55,16 +46,13 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
 
   const handlePayment = async () => {
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/order`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ amount: totalAmount }),
-        }
-      );
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: totalAmount }),
+      });
 
       const data = await res.json();
       handlePaymentVerify(data.data);
@@ -83,20 +71,17 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
       order_id: data.id,
       handler: async (response) => {
         try {
-          const res = await fetch(
-            `${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/verify`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }),
-            }
-          );
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_HOST_URL}/api/payment/verify`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            }),
+          });
 
           const verifyData = await res.json();
           if (verifyData.message) {
@@ -134,28 +119,26 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
           cartItems.map((item) => (
             <div
               key={item.id}
-              className="flex flex-col md:flex-row bg-white rounded-lg shadow-md p-10 mb-6 gap-6"
+              className="flex flex-wrap md:flex-nowrap bg-white rounded-lg shadow-md p-6 mb-6 gap-6"
             >
-              <div className="md:w-1/3 flex justify-center items-center">
+              <div className="w-full md:w-1/3 flex justify-center items-center">
                 <img
                   src={item.image}
                   alt={item.name}
                   className="rounded-lg w-full object-cover md:w-[80%] lg:w-[70%] shadow-sm"
                 />
               </div>
-              <div className="flex flex-col justify-between md:w-2/3">
+              <div className="flex flex-col justify-between w-full md:w-2/3">
                 <div>
-                  <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
-                    {item.name}
-                  </h1>
+                  <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">{item.name}</h1>
                   <p className="text-gray-600 mb-4">Price: ₹{item.amount}</p>
                 </div>
-                <div className="flex items-center justify-between mt-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-4">
                   <span className="text-lg md:text-xl font-semibold text-green-600">
                     ₹{item.price}
                   </span>
                   <div className="flex items-center space-x-4">
-                    <span className="text-lg font-medium">Quantity</span>
+                    <span className="text-lg font-medium">Qty</span>
                     <button
                       className="text-xl bg-gray-200 hover:bg-gray-300 rounded-full px-3 py-1"
                       onClick={() => handleDecrease(item.id)}
@@ -172,10 +155,10 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
                   </div>
                   <button
                     onClick={() => handleRemoveFromCart(item.id)}
-                    className="flex items-center text-red-500 hover:text-red-600 transition duration-200"
+                    className="flex items-center justify-center text-sm sm:text-base text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md transition"
                   >
-                    <RiDeleteBin7Fill size={24} />
-                    <span className="ml-2">Remove</span>
+                    <RiDeleteBin7Fill className="mr-2" size={20} />
+                    Remove
                   </button>
                 </div>
               </div>
@@ -222,7 +205,6 @@ function Cart({ cartItems, setCartItems, setCount, address, addressSaved, isLogg
   );
 }
 
-// Prop validation
 Cart.propTypes = {
   cartItems: PropTypes.arrayOf(
     PropTypes.shape({
@@ -249,7 +231,6 @@ Cart.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
 };
 
-// Default props
 Cart.defaultProps = {
   address: {
     name: "",
